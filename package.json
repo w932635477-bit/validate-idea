@@ -1,0 +1,19 @@
+{
+  "name": "validate-idea",
+  "version": "0.1.0",
+  "private": true,
+  "description": "跨市场需求验证 skill 的数据抓取层(中英双市场)。评分由跑 skill 的 Claude 做,零 LLM 依赖。",
+  "scripts": {
+    "validate": "tsx validate.ts",
+    "setup": "npm install"
+  },
+  "dependencies": {
+    "cheerio": "1.0.0",
+    "dotenv": "^17.4.2",
+    "undici": "^8.5.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "tsx": "4.19.2"
+  }
+}
