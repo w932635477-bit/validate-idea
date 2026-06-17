@@ -1,0 +1,72 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:1280px; height:640px; overflow:hidden; }
+  body {
+    font-family: -apple-system, "SF Pro Display", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: radial-gradient(120% 120% at 18% 0%, #1e1b4b 0%, #0b1020 55%, #05060d 100%);
+    color: #e5e7eb;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .glow {
+    position:absolute; width:520px; height:520px; right:-120px; top:-160px;
+    background: radial-gradient(circle, rgba(129,140,248,.28), transparent 65%);
+    filter: blur(10px);
+  }
+  .card { width:1120px; padding: 52px 0; position:relative; z-index:1; }
+  .tag {
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:18px; font-weight:600; letter-spacing:.04em;
+    color:#a5b4fc; background: rgba(99,102,241,.12);
+    border:1px solid rgba(129,140,248,.4);
+    padding:7px 15px; border-radius:999px;
+  }
+  h1 {
+    font-size:106px; font-weight:800; letter-spacing:-.035em;
+    margin: 20px 0 4px; line-height:.98;
+    background: linear-gradient(90deg,#ffffff,#c7d2fe 55%,#a5b4fc);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .en { font-size:31px; font-weight:600; color:#f1f5f9; margin-top:16px; }
+  .en .dim { color:#94a3b8; font-weight:400; }
+  .cn { font-size:21px; color:#9aa4bf; margin-top:9px; }
+  .scores { display:flex; gap:16px; margin-top:36px; }
+  .chip {
+    background: rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.10);
+    padding:14px 22px; border-radius:14px;
+    min-width:170px;
+  }
+  .chip .lab { display:block; font-size:14px; font-weight:600; color:#8b93a7; margin-bottom:4px; letter-spacing:.03em; text-transform:uppercase;}
+  .chip .v { font-size:24px; font-weight:800; color:#e5e7eb; }
+  .chip.bad { border-color: rgba(248,113,113,.4); }
+  .chip.bad .v { color:#fca5a5; }
+  .chip.mid .v { color:#fcd34d; }
+  .foot {
+    margin-top:40px;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:18px; color:#64748b; border-top:1px solid rgba(255,255,255,.07); padding-top:20px;
+  }
+  .foot .url { color:#cbd5e1; font-weight:600; font-size:19px; }
+  .pill { display:inline-flex; gap:14px; align-items:center; color:#8b93a7; }
+  .dot { width:5px;height:5px;border-radius:50%;background:#475569; display:inline-block;}
+</style></head>
+<body>
+  <div class="glow"></div>
+  <div class="card">
+    <span class="tag">⚡ Claude Code Skill</span>
+    <h1>validate-idea</h1>
+    <div class="en">Cross-market idea validation <span class="dim">— don't build blind</span></div>
+    <div class="cn">跨市场需求验证 · 中英双市场真实数据 + 严格评分 + 双语报告</div>
+    <div class="scores">
+      <div class="chip mid"><span class="lab">Global</span><span class="v">🌍 45 / 100</span></div>
+      <div class="chip mid"><span class="lab">China</span><span class="v">🏠 61 / 100</span></div>
+      <div class="chip bad"><span class="lab">Verdict</span><span class="v">don't build</span></div>
+    </div>
+    <div class="foot">
+      <span class="url">github.com/w932635477-bit/validate-idea</span>
+      <span class="pill">Zero LLM key<span class="dot"></span>9 data sources<span class="dot"></span>no deploy</span>
+    </div>
+  </div>
+</body></html>

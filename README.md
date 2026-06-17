@@ -1,61 +1,96 @@
-# validate-idea — 跨市场需求验证(Claude Code skill)
+[English](./README.md) | [中文](./README.zh-CN.md)
 
-输入一句话产品 idea,采集中英**双市场**真实数据(搜索/社区/竞品),严格评分,输出双语验证报告:本地市场 vs 对方市场、谁先做、造不造。
+<p align="center">
+  <img src="./assets/social-preview.png" alt="validate-idea" width="720">
+</p>
 
-**杀手点:跨市场对比。** 多数 idea 验证工具只看一个市场。这个同时扒中文 + 英文,告诉你"你的痛在对方市场是不是早被解决了"——需求真实 ≠ 机会真实。
+<p align="center">
+  <strong>Cross-market idea validation for indie builders.</strong><br>
+  Real data from Chinese + English markets · strict scoring · bilingual report.
+</p>
 
-## 怎么工作
+<p align="center">
+  <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT"></a>
+  <img src="https://img.shields.io/badge/node-%E2%89%A518-green.svg" alt="node">
+  <img src="https://img.shields.io/badge/Claude%20Code-Skill-7c3aed.svg" alt="Claude Code Skill">
+  <img src="https://img.shields.io/github/stars/w932635477-bit/validate-idea?style=social" alt="stars">
+</p>
 
-评分由**跑这个 skill 的 Claude** 做(读数据、判断、写报告)。本仓库只提供**数据抓取层**:9 个 fetcher 覆盖中英两市场的 search / community / competitor 三维。**零 LLM key 依赖**——你已有的 Claude 就是评分引擎。
+---
 
-## 安装为 Claude Code skill
+## The killer angle
+
+Most idea-validation tools look at **one** market. This one pulls real signals from **both** the Chinese and English markets at once, then tells you the uncomfortable truth: **your pain is probably already solved in the other market.** Real demand ≠ real opportunity.
+
+> Sample verdict — *cross-border payments tool*: Global **45/100**, China **61/100** → both red oceans → **don't build**. Three months of code, saved.
+
+## Install (Claude Code skill)
 
 ```bash
 git clone https://github.com/w932635477-bit/validate-idea.git ~/.claude/skills/validate-idea
-cd ~/.claude/skills/validate-idea
-cp .env.example .env   # 按需填(全可选,见下)
-npm install            # 一次性
+cd ~/.claude/skills/validate-idea && npm install   # one-time
 ```
 
-装好后在 Claude Code 里直接描述你的 idea(中/英都行),会自动触发这个 skill。
+Then just describe your idea in Claude Code ("validate this idea: …") and the skill fires. **Zero LLM API key** — the Claude running the skill *is* the scorer.
 
-`.env` 全是可选 key,缺了对应源就优雅降级(该源 `ok:false`,不崩):
-- `FIRECRAWL_API_KEY` — search 维度,两市场都靠它,建议填(数据质量最好)
-- `ZHIHU_COOKIE` — 中文社区(知乎)
-- `HTTPS_PROXY` — 在中国抓英文源(hn/lobsters/brave/firecrawl)经本地代理出
-- `BRAVE_SEARCH_API_KEY` — 英文竞品(无 key 时 HN Show HN 发布帖兜底)
+## How it works
 
-## 用法
+```mermaid
+flowchart LR
+  A["💬 one-line idea"] --> B["🔎 9 fetchers · CN+EN"]
+  B --> C["📊 raw data: search / community / competitor"]
+  C --> D["🧠 Claude scores · strict, no hallucination"]
+  D --> E["📄 bilingual report · local vs foreign · build?"]
+```
 
-在 Claude Code 里描述你的 idea(中/英都行)触发 skill。或手动跑数据层看原始 JSON:
+This repo ships the **data layer** only: 9 fetchers covering search / community / competitor across both markets. Scoring and the bilingual report are produced by your Claude reading the fetched JSON — that's why no API key is needed.
+
+## Data sources
+
+| Dimension | Chinese market | English market |
+|---|---|---|
+| search | Firecrawl | Firecrawl |
+| community | Zhihu (cookie) | HN / Lobsters / pullpush (Reddit) |
+| competitor | Baidu | Brave (key) + HN Show HN fallback |
+
+Every fetcher fails independently (`ok:false`) and never blocks the others. Missing data is reported honestly, never invented.
+
+## Sample reports
+
+Real runs in [`docs/demos/`](./docs/demos):
+- **Cross-border payments** — don't build (Global 45 / China 61, both red oceans)
+- **AI weekly report** — build, but China only
+- **AI PR review bot** — don't build (giants + open source + platform-native)
+- **Interview repo quarantine** — real pain (DPRK "Contagious Interview"), but Socket.dev already owns it → niche wedge only
+
+## Configure (all optional)
 
 ```bash
-npx tsx validate.ts '{"detectedLocale":"zh","zh":["AI周报"],"en":["AI weekly report"]}'
+cp .env.example .env   # fill what you have; missing sources just degrade
 ```
 
-## 数据源
+- `FIRECRAWL_API_KEY` — search dimension (both markets). Recommended, best data.
+- `ZHIHU_COOKIE` — Chinese community (Zhihu).
+- `HTTPS_PROXY` — needed in China to reach English sources.
+- `BRAVE_SEARCH_API_KEY` — English competitors (HN Show HN backstops if absent).
 
-| 维度 | 中文市场 | 英文市场 |
-|---|---|---|
-| search | firecrawl | firecrawl |
-| community | 知乎(cookie) | HN / Lobsters / pullpush(reddit 聚合) |
-| competitor | baidu-search | brave(key)+ HN Show HN 兜底 |
+## FAQ
 
-每个 fetcher 失败独立 catch,返回 `ok:false`,不阻塞其他源。
+- **The skill doesn't trigger** — restart Claude Code so it rescans `~/.claude/skills/`.
+- **English sources return nothing** — set `HTTPS_PROXY` if you're behind the GFW.
+- **Zhihu returns 403** — Zhihu anti-scrape; paste a fresh login cookie into `ZHIHU_COOKIE`.
+- **A dimension scores very low** — by design: missing data forces a low score (no inventing). Fill the relevant key in `.env`.
 
-## demo 报告(方法学证据)
+## Honest notes
 
-三篇真实跑出来的验证报告(见 [`docs/demos/`](docs/demos/)):
-- **出海收款** — 别造(全球 45 / 中国 61,两边红海)
-- **AI 周报** — 造,但只造中国
-- **AI PR review** — 别造(巨头 + 开源 + 平台原生三重碾压)
+- English sources need a proxy inside China; without it the English dim is thin (flagged honestly).
+- Data-poor dimensions are forced low — prevents the "no data → medium score" delusion.
+- The report is decision support, not the decision.
 
-## 诚实声明
+## Tech
 
-- EN 源在中国需代理,否则英文维度数据贫瘠(如实标 `ok:false`,不编)。
-- 数据缺失的维度,评分规则强制低分(10),防止"没数据就臆测中等分"。
-- 报告是决策辅助,不是决策本身。
+`cheerio` + `undici` + `zod` + `tsx`. No frontend, no deploy, no LLM calls.
 
-## 技术栈
+---
 
-cheerio + undici + zod + tsx。无前端、无部署、无 LLM 调用。
+MIT © [w932635477-bit](https://github.com/w932635477-bit)
