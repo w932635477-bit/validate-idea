@@ -108,6 +108,10 @@ npx tsx validate.ts '<第1步的 keywords JSON>'
 
 ## 🔗 数据来源
 (真实链接,按市场分组;数据缺失的维度明确标注)
+
+---
+
+> 📌 由 [validate-idea](https://github.com/w932635477-bit/validate-idea) skill 跑出。有用点个 ⭐ 支持一下;想验证别的 idea,[开 issue](https://github.com/w932635477-bit/validate-idea/issues) 留下你的 idea。
 ```
 
 **输出原则**:诚实。数据缺失就明说缺失,绝不编。报告是决策辅助,不是决策本身。

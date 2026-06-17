@@ -1,0 +1,51 @@
+name: traffic-archive
+
+# 每天抓一次 GitHub Traffic(clone/view/star/fork/referrer),append 到
+# traffic-history.jsonl。绕开 GitHub Traffic 只留 14 天的限制,攒出装机增长曲线。
+# 安装 skill = git clone,所以 clones.uniques = 装机人数的最准免费代理。
+
+on:
+  schedule:
+    # 每天 UTC 16:37(偏移分钟,避开整点 API 峰)
+    - cron: '37 16 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: snapshot + append
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          REPO="${{ github.repository }}"
+          TS="$(date -u +%Y-%m-%d)"
+          STARS=$(gh api "repos/$REPO" --jq '.stargazers_count')
+          FORKS=$(gh api "repos/$REPO" --jq '.forks_count')
+          CLONES=$(gh api "repos/$REPO/traffic/clones" --jq '{uniques, count}')
+          VIEWS=$(gh api "repos/$REPO/traffic/views" --jq '{uniques, count}')
+          REFS=$(gh api "repos/$REPO/traffic/popular/referrers" --jq '[.[] | {referrer, uniques, count}]' || echo '[]')
+          jq -n \
+            --arg date "$TS" \
+            --argjson stars "$STARS" \
+            --argjson forks "$FORKS" \
+            --argjson clones "$CLONES" \
+            --argjson views "$VIEWS" \
+            --argjson referrers "$REFS" \
+            '{date:$date, stars:$stars, forks:$forks, clones:$clones, views:$views, referrers:$referrers}' \
+            >> traffic-history.jsonl
+          echo "appended snapshot for $TS"
+
+      - name: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add traffic-history.jsonl
+          git commit -m "chore(traffic): archive $(date -u +%Y-%m-%d)"
+          git push
