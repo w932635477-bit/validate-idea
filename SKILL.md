@@ -67,6 +67,7 @@ npx tsx validate.ts '<第1步的 keywords JSON>'
 **先过相关性闸门(打分前必做)**:抓回的条目常有噪声——英文搜 `dependency security` 会命中一堆词典释义,中文 `依赖安全` 会撞心理学"安全依恋"。逐条判断是否与 idea 真正相关:
 - 剔除:词典站(merriam-webster/cambridge/dictionary.com)、同形异义词、明显跑题的条目。
 - 某维度 **relevant 条目 < 2**,即使 `dataCompleteness` 标 `ok`,也按数据贫瘠处理:score ≤ 25,reason 写"返回结果与 idea 相关性不足(如全是词典/跑题),无法评估真实需求"。
+- **高噪声社区源(lobsters / Reddit-via-pullpush)逐条核相关性**:这俩常混入跑题内容(lobsters 满是无关技术文;pullpush 混入游戏发版 / 梗图 / 无关 sub)。**该源 relevant 条目 < 半数时,整个社区维度按内容贫瘠降权**——别剔几条就照常给高分,噪声多 ≠ 需求强。
 - 这是 `enforceNoData` 的补充:`enforceNoData` 只看源通没通,闸门看内容对不对。**两者都过才给真实高分。** completeness 标 ok 但内容是垃圾 ≠ 有数据。
 
 评分维度(各自 0-100):
