@@ -94,6 +94,13 @@ npx tsx validate.ts '<第1步的 keywords JSON>'
 - `total` = round(search × 0.4 + community × 0.3 + competitor × 0.3)
 - `verdict`:≥70 = **造**;≥40 = **可以造,注意风险**;<40 = **不建议造**
 
+**超饱和覆盖(verdict 算完后强制套用)**:若该市场竞品命中以下 **≥2 项**(必须引用数据里的具体竞品为证,不许凭空判),verdict **强制降一级**(造→注意风险;注意风险→不建议造),并在该市场 reason 里写明降级依据:
+1. **巨头在位**:household-name / 千万用户级竞品(如 Todoist 3000 万、微软待办);
+2. **大厂免费捆绑**:核心功能被大平台当附属功能免费送(如 飞书/Teams 内置、Zoom/Meet 原生);
+3. **成熟开源**:存在功能完整的开源等价物(如 MoliTodo、conventional-changelog)。
+
+> 为什么需要:高需求(search/community 高)会稀释竞品低分,让"又一个 todo"这种死红海拿到 53 分假性"注意风险"。覆盖规则只在**有饱和证据**时触发,不扭曲正常 case。
+
 ### 第 5 步:跨市场对比(Part C)
 基于两个市场的总分和原始数据:
 - **scoreDiff**:本地 vs 对方总分差 + 谁更高
