@@ -37,13 +37,13 @@ Then just describe your idea in Claude Code ("validate this idea: …") and the 
 
 ```mermaid
 flowchart LR
-  A["💬 one-line idea"] --> B["🔎 9 fetchers · CN+EN"]
+  A["💬 one-line idea"] --> B["🔎 7 fetchers · CN+EN"]
   B --> C["📊 raw data: search / community / competitor"]
   C --> D["🧠 Claude scores · strict, no hallucination"]
   D --> E["📄 bilingual report · local vs foreign · build?"]
 ```
 
-This repo ships the **data layer** only: 9 fetchers covering search / community / competitor across both markets. Scoring and the bilingual report are produced by your Claude reading the fetched JSON — that's why no API key is needed.
+This repo ships the **data layer** only: 7 fetchers covering search / community / competitor across both markets. Scoring and the bilingual report are produced by your Claude reading the fetched JSON — that's why no API key is needed.
 
 ## Data sources
 
