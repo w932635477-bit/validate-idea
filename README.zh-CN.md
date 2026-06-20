@@ -37,13 +37,13 @@ cd ~/.claude/skills/validate-idea && npm install   # 一次性
 
 ```mermaid
 flowchart LR
-  A["💬 一句话 idea"] --> B["🔎 9 个 fetcher · 中英双市场"]
+  A["💬 一句话 idea"] --> B["🔎 7 个 fetcher · 中英双市场"]
   B --> C["📊 原始数据:搜索 / 社区 / 竞品"]
   C --> D["🧠 Claude 评分 · 严格 · 不编"]
   D --> E["📄 双语报告 · 本地 vs 对方 · 造不造"]
 ```
 
-本仓库只提供**数据抓取层**:9 个 fetcher 覆盖中英两市场的 search / community / competitor 三维。评分和双语报告由你的 Claude 读抓回的 JSON 生成 —— 所以不需要任何 API key。
+本仓库只提供**数据抓取层**:7 个 fetcher 覆盖中英两市场的 search / community / competitor 三维。评分和双语报告由你的 Claude 读抓回的 JSON 生成 —— 所以不需要任何 API key。
 
 ## 数据源
 
