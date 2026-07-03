@@ -33,7 +33,7 @@ jobs:
           CLONES=$(gh api "repos/$REPO/traffic/clones" --jq '{uniques, count}')
           VIEWS=$(gh api "repos/$REPO/traffic/views" --jq '{uniques, count}')
           REFS=$(gh api "repos/$REPO/traffic/popular/referrers" --jq '[.[] | {referrer, uniques, count}]' || echo '[]')
-          jq -n \
+          jq -n -c \
             --arg date "$TS" \
             --argjson stars "$STARS" \
             --argjson forks "$FORKS" \
